@@ -59,6 +59,21 @@ int insert(struct trieNode *root, const char *key)
  
     // mark last node as a word
     pCrawl->isWord = true;
+    
+    // add word to words.txt
+    FILE *f = fopen("words.txt", "a");
+    
+    if (f == NULL)
+    {
+        printf("Error opening file!\n");
+        return 1;
+    }
+    else {
+        fprintf(f, " %s", key);
+        printf("Added %s to game dictionary!\n", key);
+		fclose(f);
+    }
+    
     return 0;
 }
  
@@ -89,17 +104,20 @@ int main()
     // Populate dictionary
     struct trieNode *root = newNode();
 
-	FILE *fp = fopen ("words.txt", "r");
+	FILE *f = fopen("words.txt", "r");
     const char str[25];
+    int c;
 
-    while (!feof (fp)) {
-    	fscanf (fp, "%s", str);
-    	printf("%s\n", str);
-    	insert(root, str);
+    if (f != NULL) {
+        while ((c = fgetc(f)) != EOF) {
+        	fscanf(f, "%s", str);
+        	printf("%s\n", str);
+        	insert(root, str);
+        }
+        
+        fclose(f);
     }
 
-    fclose (fp);
- 
     // Test functionality
     char output[][32] = {"Not present in trie", "Present in trie"};
 
