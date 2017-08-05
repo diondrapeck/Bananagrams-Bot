@@ -86,23 +86,19 @@ bool search(struct trieNode *root, const char *key)
 
 int main()
 {
-    // Initialize an array of words
-    char words[][77] = {"an", "apple", "acorn", "bye", "baby", "bubble", 
-	"candy", "crush", "cat", "dad", "dead", "day", "end", "earth", "eye"
-	"feel", "form", "fate", "god", "game", "gift", "head", "he", "hat",
-    "is", "ice", "idea", "jump", "juice", "jeans", "kite", "kick",
-    "lemon", "lame", "look", "man", "me", "mean", "new", "no", "note", "open",
-    "old", "onion", "peel", "pop", "pea", "quiet", "quick", "qi", "rest", 
-    "run", "rum", "see", "song", "settle", "talk", "time", "tabulate", "under",
-    "uncle", "us", "very", "voter", "vibe", "we", "welcome", "weekend", 
-    "xylophone", "xylem", "you", "yellow", "yes", "zoo", "zoom", "zip"};
- 
+    // Populate dictionary
     struct trieNode *root = newNode();
- 
-    // Populate dictionary 
-    int i;
-    for (i = 0; i < ARRAY_SIZE(words); i++)
-        insert(root, words[i]);
+
+	FILE *fp = fopen ("words.txt", "r");
+    const char str[25];
+
+    while (!feof (fp)) {
+    	fscanf (fp, "%s", str);
+    	printf("%s\n", str);
+    	insert(root, str);
+    }
+
+    fclose (fp);
  
     // Test functionality
     char output[][32] = {"Not present in trie", "Present in trie"};
@@ -110,9 +106,9 @@ int main()
     printf("%s --- %s\n", "zip", output[search(root, "zip")] );
     printf("%s --- %s\n", "these", output[search(root, "these")] );
     printf("%s --- %s\n", "uncle", output[search(root, "uncle")] );
+    printf("%s --- %s\n", "crush", output[search(root, "crush")] );
     printf("%s --- %s\n", "kitten", output[search(root, "kitten")] );
-	
-	insert(root, "a");
+
 	insert(root, "kitten");
 	
 	printf("%s --- %s\n", "kitten", output[search(root, "kitten")]);
